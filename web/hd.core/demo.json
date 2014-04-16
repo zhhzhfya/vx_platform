@@ -1,0 +1,53 @@
+{
+	"acts" : [{
+				"act" : "service_reg",
+				"services" : "load_res:xxx/xxx.js:aaa"
+			}, {
+				"act" : "sync_cache",
+				"sync" : true,
+				"res" : [{
+							"obj" : ""
+						}]
+			}, {
+				"act" : "load_res",
+				"sync" : true,
+				"resources" : "aaa.js,bbb.js,ccc.css"
+			}, {
+				"act" : "render_ui",
+				"sync" : true,
+				"obj_rel" : "EQ_EQUIP.EQ_EQXXX",
+				"obj_attrs" : [{
+							"code" : "EQ_CODE",
+							"name" : "设备编码",
+							"is_pk" : true,
+							"type" : "str",
+							"len" : 40
+						}, {
+							"code" : "EQ_NAME",
+							"name" : "设备名称",
+							"is_pk" : true,
+							"type" : "str",
+							"len" : 200
+						}]
+			}, {
+				"act" : "load_res",
+				"sync" : true,
+				"func_rel" : "EQ_EQUIP.EQ_EQXXX",
+				"datas" : [{
+							"name" : "a",
+							"age" : 22
+						}, {
+							"name" : "a",
+							"age" : 22
+						}, {
+							"name" : "a",
+							"age" : 22
+						}, {
+							"name" : "a",
+							"age" : 22
+						}, {
+							"name" : "a",
+							"age" : 22
+						}]
+			}]
+}
