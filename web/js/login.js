@@ -1,91 +1,113 @@
-function login_handler() {
-	loginForm.getForm().submit({
-				url : '../services/Login.ashx',
-				method : 'post',
-				waitMsg : "正在登录......",
-				success : function(form, action) {
-					var loginResult = action.result.success;
-					if (loginResult === false) {
-						Ext.Msg.alert('提示', action.result.msg);
+function login() {
+	Ext.QuickTips.init();
+	// Ext.Msg.alert("系统提示","login.js is here");
+	var loginForm = new Ext.form.FormPanel({
+		id: 'loginForm',
+		baseCls: 'x-plain',
+		plain: true,
+		defaults: {
+			anchor: '95%'
+		},
+		defaultType: 'textfield',
+		items: [{
+			id: 'userNoFromKey',
+			name: 'userNoFromKey',
+			hidden: true,
+			hideLabel: true
+		}, {
+			id: 'userNo',
+			name: 'userNo',
+			fieldLabel: '用户名',
+			blankText: "用户名不能为空!",
+			allowBlank: false
+		}, {
+			id: 'pwdFromKey',
+			name: 'pwdFromKey',
+			hidden: true,
+			hideLabel: true
+		}, {
+			id: 'password',
+			name: 'password',
+			fieldLabel: '密&nbsp;&nbsp;&nbsp;码',
+			inputType: 'password',
+			blankText: "密码不能为空!",
+			allowBlank: false
+		}, {
+			id: 'serialIdFromKey',
+			name: 'serialIdFromKey',
+			hidden: true,
+			hideLabel: true
+		}, {
+			xtype: 'box',
+			id: 'browseImage',
+			//fieldLabel: "预览图片",
+			autoEl: {
+				width: 148,
+				height: 148,
+				tag: 'img',
+				// type : 'image',  
+				src: '/images/ew.png',
+				complete: 'off',
+				id: 'imageBrowse'
+			}
+		}]
+	});
+	var loginWin = new Ext.Window({
+		title: '系统登录页面',
+		width: 300,
+		height: 180,
+		items: loginForm,
+		plain: true,
+		bodyStyle: 'padding:5px;',
+		buttonAlign: 'center',
+		layout: 'fit',
+		buttons: [{
+			text: '登录',
+			handler: submitForm
+		}, {
+			text: '重置',
+			handler: resetForm
+		}],
+		listeners: {
+			'show': function() {
+				this.findByType('textfield')[0].focus(true, true); // 第一个textfield获得焦点
+			}
+		}
+	});
+
+	function submitForm() {
+		//alert("submit...");
+		var form = Ext.getCmp("loginForm").getForm();
+		if (form.isValid()) {
+			//alert("isvalid");
+			form.submit({
+				url: 'login.do?method=login',
+				method: 'POST',
+				success: function(form, action) {
+					var isSucc = action.result.success;
+					if (isSucc) {
+
+						var forward = action.result.data;
+						//alert(forward);
+						window.location.href = forward;
 					} else {
-						if (loginResult === true) {
-							window.location.href = 'Main.htm';
-						}
+
+						Ext.Msg.alert("系统提示", "用户登录失败");
 					}
 				},
-				failure : function(form, action) {
-					form.reset();
-					// Ext.Msg.alter("失败");
-					switch (action.failureType) {
-						case Ext.form.Action.CLIENT_INVALID :
-							Ext.Msg.alert("错误1", "提交的表单数据无效,请检查!");
-							break;
-						case Ext.form.Action.CONNECT_FAILURE :
-							Ext.Msg.alert("错误2", "请求失败");
-							break;
-						case Ext.form.Action.SERVER_INVALID :
-							// Ext.Msg.alert("Failure", action.result.msg);
-							Ext.Msg.alert("账号或密码错误！", action.result.msg);
-					}
+				failure: function(form, action) {
+					Ext.Msg.alert("系统提示", "用户登录失败");
 				}
+
 			});
+		}
+	}
+
+	function resetForm() {
+		alert("reset...");
+		Ext.getCmp("loginForm").getForm().reset();
+	}
+	loginWin.show();
+
 }
-
-var loginForm = new Ext.FormPanel({
-			standardSubmit : true,
-			url : 'MyJsp.jsp',
-			renderTo : document.body,
-			frame : true,
-			title : '用户登陆',
-			// bodyStyle:"padding:5px 5px 0",
-			width : 400,
-			items : [{
-						xtype : 'fieldset',
-						title : '用户登录',
-						collapsible : true,
-						autoHeight : true,
-						defaultType : 'textfield',
-						items : [{
-									fieldLabel : '用户名',
-									name : 'userName',
-									width : 180,
-									allowBlank : false,
-									blankText : '用户名不能为空',
-									minLength : 6,
-									minLengthText : '用户名的长度为[6-20]',
-									maxLength : 20,
-									maxLengthText : '用户名的长度为[6-20]'
-								}, {
-									inputType : 'password',
-									fieldLabel : '密 &nbsp; &nbsp;码',
-									name : 'password',
-									width : 180,
-									allowBlank : false,
-									blankText : '密码不能为空',
-									minLength : 6,
-									minLengthText : '密码的长度为[6-20]',
-									maxLength : 20,
-									maxLengthText : '密码的长度为[6-20]'
-								}, {
-									fieldLabel : '验证码',
-									name : 'validate',
-									width : 80,
-									allowBlank : false,
-									blankText : '验证码不能为空'
-								}]
-					}],
-			buttons : [{
-						text : '登录',
-						type : 'button',
-						handler : function() {
-							if (!loginForm.getForm().isValid())
-								return;
-
-							loginForm.getForm().submit();
-
-						}
-					}]
-
-		});
-
-loginForm.render();
+Ext.onReady(login);

@@ -9,11 +9,15 @@ var cv = {
 				// 执行消息:模版、数据、控制、业务DNA
 				// 表单的消息
 				if (msg['act'] == 'load_res') {
+					var ress = new Array();
 					// 加载资源
 					jQuery.each(msg['resources'], function(i, res) {
+						ress[i] = res['mod'];
+
 						In.add(res['mod'], res);
-						In(res['mod'], function() {});
+						//In(res['mod'], function() {});
 					});
+					In.use.apply(this, ress);
 				}
 			});
 			// var acts = message['acts'];
