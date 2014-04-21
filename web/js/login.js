@@ -27,9 +27,10 @@ function login() {
 	var loginWin = new Ext.Window({
 		title: '系统登录页面',
 		width: 300,
-		height: 180,
+		height: 140,
 		items: loginForm,
 		plain: true,
+		closable: false,
 		bodyStyle: 'padding:5px;',
 		buttonAlign: 'center',
 		layout: 'fit',
@@ -85,7 +86,7 @@ function login() {
 Ext.onReady(function() {
 	login();
 	cv['eb'].registerHandler("hd.core.server.info", function(msg, replyTo) {
-		console.log(msg);
+		//console.log(msg);
 	});
 
 
