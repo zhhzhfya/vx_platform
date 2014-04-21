@@ -14,6 +14,8 @@
 				"address": "hd.authmanager.login"
 			}, {
 				"address": "hd.core"
+			},{
+				"address": "hd.core.server.info"
 			}],
 			"outbound_permitted": [{
 				"address": "hd.memory.info"
@@ -23,6 +25,8 @@
 				"address": "hd.authmanager.login"
 			}, {
 				"address": "hd.core"
+			},{
+				"address": "hd.core.server.info"
 			}]
 		}
 	}, {
@@ -30,7 +34,7 @@
 		"config": {
 			"auto-redeploy": true,
 			"address": "hd.mgo",
-			"host": "192.168.1.179",
+			"host": "localhost",
 			"port": 27017,
 			"pool_size": 20,
 			"db_name": "hd_db",

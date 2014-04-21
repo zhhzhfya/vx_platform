@@ -10,21 +10,11 @@ function login() {
 		},
 		defaultType: 'textfield',
 		items: [{
-			id: 'userNoFromKey',
-			name: 'userNoFromKey',
-			hidden: true,
-			hideLabel: true
-		}, {
 			id: 'userNo',
 			name: 'userNo',
 			fieldLabel: '用户名',
 			blankText: "用户名不能为空!",
 			allowBlank: false
-		}, {
-			id: 'pwdFromKey',
-			name: 'pwdFromKey',
-			hidden: true,
-			hideLabel: true
 		}, {
 			id: 'password',
 			name: 'password',
@@ -32,24 +22,6 @@ function login() {
 			inputType: 'password',
 			blankText: "密码不能为空!",
 			allowBlank: false
-		}, {
-			id: 'serialIdFromKey',
-			name: 'serialIdFromKey',
-			hidden: true,
-			hideLabel: true
-		}, {
-			xtype: 'box',
-			id: 'browseImage',
-			//fieldLabel: "预览图片",
-			autoEl: {
-				width: 148,
-				height: 148,
-				tag: 'img',
-				// type : 'image',  
-				src: '/images/ew.png',
-				complete: 'off',
-				id: 'imageBrowse'
-			}
 		}]
 	});
 	var loginWin = new Ext.Window({
@@ -110,4 +82,87 @@ function login() {
 	loginWin.show();
 
 }
-Ext.onReady(login);
+Ext.onReady(function() {
+	login();
+	cv['eb'].registerHandler("hd.core.server.info", function(msg, replyTo) {
+		console.log(msg);
+	});
+
+
+	var data = [{
+		name: 'Jul 07',
+		visits: 3,
+		views: 12
+	}, {
+		name: 'Aug 07',
+		visits: 34,
+		views: 12
+	}, {
+		name: 'Sep 07',
+		visits: 13,
+		views: 35
+	}, {
+		name: 'Oct 07',
+		visits: 14,
+		views: 16
+	}, {
+		name: 'Nov 07',
+		visits: 15,
+		views: 62
+	}, {
+		name: 'Dec 07',
+		visits: 16,
+		views: 12
+	}, {
+		name: 'Jan 08',
+		visits: 17,
+		views: 13
+	}, {
+		name: 'Feb 08',
+		visits: 18,
+		views: 11
+	}]
+	var store = new Ext.data.Store({
+		proxy: new Ext.data.MemoryProxy(data),
+		reader: new Ext.data.JsonReader({}, [{
+			name: 'name'
+		}, {
+			name: 'visits',
+			type: 'float'
+		}, {
+			name: 'views',
+			type: 'float'
+		}])
+	});
+	store.load();
+	// extra extra simple         
+	new Ext.Panel({
+		title: 'ExtJS.com Visits Trend',
+		applyTo: document.body,
+		width: 500,
+		height: 300,
+		layout: 'fit',
+		items: {
+			xtype: 'linechart',
+			store: store,
+			xField: 'name',
+			listeners: {
+				itemclick: function(o) {
+					var rec = store.getAt(o.index);
+					Ext.example.msg('Item Selected', 'You chose {0}.', rec.get('name'));
+				}
+			},
+			series: [{ //列                       
+				type: 'line', //类型可以改变（线）                       
+				displayName: 'Visits',
+				yField: 'visits',
+				style: {
+					color: 0xE1E100
+				}
+			}]
+		}
+	});
+
+
+
+});
