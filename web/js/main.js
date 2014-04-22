@@ -7,7 +7,11 @@ var cv = {
 				// 执行消息:模版、数据、控制、业务DNA 表单的消息. act:,load_res,form,update_datas,char,,,,,,,,,,,,,,,,,,,,
 				if (msg['act'] == 'service_reg') {
 					//load_res,aaa
-					var services = msg['services'].split(;);
+					var services = msg['services'].split(';');
+					$.each(services, function(i, ser){
+						var ss = ser.split(',');
+						if (eval(ss[....])) {};
+					});
 				}
 				if (message_services[msg['act']]) {
 					message_services[msg['act']].apply(this, msg);
