@@ -13,22 +13,12 @@
 				"sync" : true,
 				"resources" : [{
 							"mod" : "ext-css",
-							"path" : "ext-3.4.1.1/resources/css/ext-all.css",
+							"path" : "ext-4.2.1.883/resources/css/ext-all.css",
 							"type" : "css",
 							"charset" : "utf-8"
 						}, {
-							"mod" : "extbase",
-							"path" : "ext-3.4.1.1/adapter/ext/ext-base-debug.js",
-							"type" : "js",
-							"charset" : "utf-8"
-						}, {
 							"mod" : "extalljs",
-							"path" : "ext-3.4.1.1/ext-all.js",
-							"type" : "js",
-							"charset" : "utf-8"
-						}, {
-							"mod" : "eventtrans",
-							"path" : "js/renderer/EventTranslate.js",
+							"path" : "ext-4.2.1.883/ext-all.js",
 							"type" : "js",
 							"charset" : "utf-8"
 						}, {
@@ -39,4 +29,3 @@
 						}]
 			}]
 }
-
