@@ -1,0 +1,16 @@
+{
+	"acts" : [{
+				"act" : "service_reg",
+				"services" : "load_res:xxx/xxx.js:aaa"
+			}, {
+				"act" : "sync_cache",
+				"sync" : true,
+				"res" : [{
+							"obj" : ""
+						}]
+			}, {
+				"act" : "load_res",
+				"sync" : true,
+				"resources" : "aaa.js,bbb.js,ccc.css"
+			}]
+}
