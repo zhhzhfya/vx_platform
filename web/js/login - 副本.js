@@ -6,8 +6,19 @@
 		Ext.QuickTips.init();
 		//var loginForm = Ext.create('Ext.form.Panel', temp);
 
+		var data = [];
 		var generateCpuLoad = function() {
 			var me = this;
+
+			function generate(factor) {
+				var value = factor + ((Math.floor(Math.random() * 2) % 2) ? -1 : 1) * Math.floor(Math.random() * 9);
+
+				if (value < 0 || value > 50) {
+					value = 20;
+				}
+
+				return value;
+			}
 
 			if (data.length === 0) {
 				data.push({
@@ -16,6 +27,14 @@
 					time: 0
 				});
 
+				// for (var i = 1; i < 100; i++) {
+				// 	data.push({
+				// 		core1: generate(data[i - 1].core1),
+				// 		core2: generate(data[i - 1].core2),
+				// 		time: i
+				// 	});
+				// }
+				//alert(data);
 				cpuLoadStore.loadData(data);
 			} else {
 				cpuLoadStore.data.removeAt(0);

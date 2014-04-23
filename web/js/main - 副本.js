@@ -37,9 +37,21 @@ var cv = {
 	doLogin: function() {
 		// 如果没有连接，连接并发送登录消息
 		if (!cv['connect']) {
-			In.add('sockjs', { path: 'js/util/sockjs-0.3.4.js', type: 'js',charset: 'utf-8' });
-			In.add('vertxbus', { path: 'js/util/vertxbus-2.1.js', type: 'js', charset: 'utf-8' });
-			In.add('jquery', { path: 'js/util/jquery-1.7.1.min.js', type: 'js', charset: 'utf-8' });
+			In.add('sockjs', {
+				path: 'js/util/sockjs-0.3.4.js',
+				type: 'js',
+				charset: 'utf-8'
+			});
+			In.add('vertxbus', {
+				path: 'js/util/vertxbus-2.1.js',
+				type: 'js',
+				charset: 'utf-8'
+			});
+			In.add('jquery', {
+				path: 'js/util/jquery-1.7.1.min.js',
+				type: 'js',
+				charset: 'utf-8'
+			});
 			In('sockjs', 'vertxbus', 'jquery', function() {
 				if (!cv['eb']) {
 					cv['eb'] = new vertx.EventBus("/eventbus");
