@@ -7,7 +7,7 @@
 		//var loginForm = Ext.create('Ext.form.Panel', temp);
 
 		var generateCpuLoad = function() {
-			var me = this;
+			var me = this,data = [];
 
 			if (data.length === 0) {
 				data.push({
