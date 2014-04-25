@@ -1,7 +1,7 @@
 {
 	"acts" : [{
 				"act" : "service_reg",
-				"services" : "load_res,xxx/xxx.js,aaa"
+				"services" : "load_res,aaa"
 			}, {
 				"act" : "sync_cache",
 				"sync" : true,
