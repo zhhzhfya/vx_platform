@@ -49,7 +49,7 @@ function login() {
 				minimum: 0,
 				maximum: 20,
 				fields: ['core1'],
-				title: 'CPU Load',
+				title: 'Memory Free',
 				grid: true,
 				labelTitle: {
 					font: '13px Arial'
@@ -59,7 +59,7 @@ function login() {
 				}
 			}],
 			series: [{
-				title: 'Core 1 (3.4GHz)',
+				title: 'Total Memory ???',
 				type: 'line',
 				lineWidth: 4,
 				showMarkers: false,
@@ -77,22 +77,16 @@ function login() {
 		autoHeight: true,
 		width: 480,
 		height: 370,
-		title: '用户登录',
+		title: '内存监控',
 		closable: false,
 		plain: true,
 		maximizable: true,
 		layout: 'fit',
 		items: [createCpu1LoadChart()],
 		buttons: [{
-			text: '登录',
+			text: 'OK',
 			type: 'submit',
 			handler: function() {}
-		}, {
-			text: '重置',
-			type: 'reset',
-			handler: function() {
-				this.up('form').getForm().reset();
-			}
 		}]
 	});
 
@@ -113,7 +107,7 @@ Ext.onReady(function() {
 	login();
 	var t = 0;
 	cv['eb'].registerHandler("hd.core.server.info", function(msg, replyTo) {
-		if (cpuLoadStore.data.length == 20) {
+		if (cpuLoadStore.data.length == 40) {
 			cpuLoadStore.data.removeAt(0);
 		};
 
@@ -123,7 +117,7 @@ Ext.onReady(function() {
 
 		var lastData = cpuLoadStore.last().data;
 		cpuLoadStore.loadData([{
-			core1: parseInt(msg['free']),
+			core1: parseInt(msg['total']) - parseInt(msg['free']),
 			core2: parseInt(msg['total']),
 			time: lastData.time + 1
 		}], true);
