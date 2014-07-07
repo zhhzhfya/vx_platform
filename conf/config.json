@@ -1,6 +1,7 @@
 {
 	"deploy_modules": [{
 		"moduleName": "io.vertx~mod-web-server~2.0.0-final",
+		"care_mod_resource": "webroot,json",
 		"config": {
 			"port": 3000,
 			"web_root": "web",
