@@ -1,4 +1,5 @@
 var hd.loader = function(){
 
-	var 
+	var a = "";
+	alert('loader.js ...');
 }

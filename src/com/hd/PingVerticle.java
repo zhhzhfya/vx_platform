@@ -1,4 +1,8 @@
 package com.hd;
+
+import java.sql.SQLException;
+import java.util.List;
+
 import io.vertx.rxcore.RxSupport;
 import io.vertx.rxcore.java.eventbus.RxEventBus;
 import io.vertx.rxcore.java.eventbus.RxMessage;
@@ -17,6 +21,9 @@ import org.vertx.java.platform.Verticle;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import util.BeanUtils;
+import util.DynaBean;
+import util.SyncSapEqCode;
 
 public class PingVerticle extends Verticle {
 
@@ -27,10 +34,10 @@ public class PingVerticle extends Verticle {
 		JsonObject appConfig = container.config();
 
 		// deploy the mongo-persistor module, which we'll use for persistence
-		//container.deployModule("io.vertx~mod-mongo-persistor~2.1.0-SNAPSHOT", appConfig.getObject("mongo-persistor"));
+		// container.deployModule("io.vertx~mod-mongo-persistor~2.1.0-SNAPSHOT",
+		// appConfig.getObject("mongo-persistor"));
 
 		final RxEventBus rxEventBus = new RxEventBus(vertx.eventBus());
-
 		// setup Routematcher
 		RouteMatcher matcher = new RouteMatcher();
 
@@ -50,13 +57,11 @@ public class PingVerticle extends Verticle {
 						matcher.putString("city", params.get("city"));
 
 					// create the message for the mongo-persistor verticle
-					json = new JsonObject().putString("collection", "mydb").putString("action", "find")
-							.putObject("matcher", matcher);
+					json = new JsonObject().putString("collection", "mydb").putString("action", "find").putObject("matcher", matcher);
 
 				} else {
 					// create the query
-					json = new JsonObject().putString("collection", "mydb").putString("action", "find")
-							.putObject("matcher", new JsonObject());
+					json = new JsonObject().putString("collection", "mydb").putString("action", "find").putObject("matcher", new JsonObject());
 				}
 
 				JsonObject data = new JsonObject();
@@ -70,11 +75,10 @@ public class PingVerticle extends Verticle {
 		matcher.get("/zips/:id", new Handler<HttpServerRequest>() {
 			public void handle(final HttpServerRequest req) {
 				String idToRetrieve = req.params().get("id");
-
+				System.out.println(idToRetrieve);
 				// create the query
 				JsonObject matcher = new JsonObject().putString("_id", idToRetrieve);
-				JsonObject json = new JsonObject().putString("collection", "mydb").putString("action", "find")
-						.putObject("matcher", matcher);
+				JsonObject json = new JsonObject().putString("collection", "mydb").putString("action", "find").putObject("matcher", matcher);
 
 				// and call the event we want to use
 				vertx.eventBus().send("hd.mgo", json, new Handler<Message<JsonObject>>() {
@@ -107,8 +111,7 @@ public class PingVerticle extends Verticle {
 						JsonObject newObject = new JsonObject(body);
 						JsonObject matcher = new JsonObject().putString("_id", req.params().get("id"));
 						JsonObject json = new JsonObject().putString("collection", "mydb").putString("action", "update")
-								.putObject("criteria", matcher).putBoolean("upsert", false).putBoolean("multi", false)
-								.putObject("objNew", newObject);
+								.putObject("criteria", matcher).putBoolean("upsert", false).putBoolean("multi", false).putObject("objNew", newObject);
 
 						// and call the event we want to use
 						vertx.eventBus().send("hd.mgo", json, new Handler<Message<JsonObject>>() {
@@ -144,9 +147,8 @@ public class PingVerticle extends Verticle {
 								// create the message
 								JsonObject newObject = new JsonObject(buffer.getString(0, buffer.length()));
 								JsonObject matcher = new JsonObject().putString("_id", req.params().get("id"));
-								JsonObject json = new JsonObject().putString("collection", "mydb")
-										.putString("action", "update").putObject("criteria", matcher)
-										.putBoolean("upsert", false).putBoolean("multi", false)
+								JsonObject json = new JsonObject().putString("collection", "mydb").putString("action", "update")
+										.putObject("criteria", matcher).putBoolean("upsert", false).putBoolean("multi", false)
 										.putObject("objNew", newObject);
 
 								// and return an observable
@@ -169,8 +171,8 @@ public class PingVerticle extends Verticle {
 								// check whether the previous one was
 								// successfully
 								JsonObject matcher = new JsonObject().putString("_id", req.params().get("id"));
-								JsonObject json2 = new JsonObject().putString("collection", "mydb")
-										.putString("action", "find").putObject("matcher", matcher);
+								JsonObject json2 = new JsonObject().putString("collection", "mydb").putString("action", "find")
+										.putObject("matcher", matcher);
 								return rxEventBus.send("hd.mgo", json2);
 							}
 						});
@@ -192,11 +194,42 @@ public class PingVerticle extends Verticle {
 		// output that the server is started
 		System.out.println("Webserver started, listening on port: 3001");
 		container.logger().info("Webserver started, listening on port: 3001");
+		// try {
+		// List<DynaBean> list =
+		// SyncSapEqCode.query("select a.TABLE_NAME from user_tables a,sy_table_def b where a.TABLE_NAME = b.table_code");
+		// for (DynaBean dynaBean : list) {
+		// int off = 0;
+		// while (true) {
+		// DynaBean r = SyncSapEqCode.query(null, "select * from " + dynaBean.getStr("TABLE_NAME"), off, 100);
+		// List<DynaBean> datas = (List<DynaBean>) r.get(BeanUtils.KEY_ROWSET);
+		// for (DynaBean d : datas) {
+		// JsonObject doc = new JsonObject(d.getValues());
+		// if (!doc.getString(BeanUtils.KEY_PK_CODE, "").equals("")) {
+		// doc.putString("_id", doc.getString(BeanUtils.KEY_PK_CODE));
+		// }
+		// JsonObject m = new JsonObject();
+		// m.putString("action", "save");
+		// m.putString("collection", dynaBean.getStr("TABLE_NAME"));
+		// m.putObject("document", new JsonObject(((DynaBean) d.clone()).getValues()));
+		// vertx.eventBus().send("hd.mgo", m, new Handler<Message<JsonObject>>() {
+		// @Override
+		// public void handle(Message<JsonObject> event) {
+		// System.out.println(event.body().toString());
+		// }
+		// });
+		// }
+		// if (datas.size() < 100 || off > 100) {
+		// break;
+		// }
+		// }
+		// }
+		// } catch (Exception e2) {
+		// e2.printStackTrace();
+		// }
 	}
 
 	/**
-	 * Simple handler that can be used to handle the reply from
-	 * mongodb-persistor and handles the 'more-exist' field.
+	 * Simple handler that can be used to handle the reply from mongodb-persistor and handles the 'more-exist' field.
 	 */
 	private static class ReplyHandler implements Handler<Message<JsonObject>> {
 
@@ -210,7 +243,7 @@ public class PingVerticle extends Verticle {
 
 		@Override
 		public void handle(Message<JsonObject> event) {
-			
+
 			// if the response contains more message, we need to get the rest
 			if (event.body().getString("status").equals("more-exist")) {
 				JsonArray results = event.body().getArray("results");

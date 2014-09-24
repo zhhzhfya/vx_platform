@@ -13,6 +13,10 @@
 	<classpathentry exported="true" kind="lib" path="lib/vertx-core-2.1M5.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/vertx-hazelcast-2.1M5.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/vertx-platform-2.1M5.jar" sourcepath="/vert.x"/>
+	<classpathentry kind="lib" path="lib/rxjava-core-0.19.1.jar"/>
+	<classpathentry kind="lib" path="lib/rxjava-groovy-0.19.1.jar"/>
+	<classpathentry kind="lib" path="lib/rxvertx.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc14.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

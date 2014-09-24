@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 
 import org.vertx.java.core.AsyncResult;
 import org.vertx.java.core.Handler;
@@ -14,7 +16,12 @@ import org.vertx.java.core.json.JsonObject;
 import org.vertx.java.core.logging.Logger;
 import org.vertx.java.platform.Verticle;
 
+import util.BeanUtils;
+import util.DynaBean;
+import util.SyncSapEqCode;
+
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.hd.PingVerticle;
 
 import frame.MainFrame;
@@ -28,47 +35,50 @@ public class ServerBase extends Verticle {
 		JsonArray deployModules = appConfig.getArray("deploy_modules");
 		// 发布模块
 		deployModules(logger, deployModules);
+		// 发布产品模块
+		
+		// 启动job
+		
 		// 一共监控界面
 		MainFrame frame = new MainFrame(vertx.eventBus());
 		frame.setVisible(true);
+		// 发布模块
 		container.deployVerticle(PingVerticle.class.getName());
-		
-		try {
-			Thread.sleep(200);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		BufferedReader reader = null;
-		try {
-			File file = new File("E:\\work\\workspace_vertx\\vx_platform.git\\zips.json0");
-			reader = new BufferedReader(new FileReader(file));
-			String tempString = null;
-			while ((tempString = reader.readLine()) != null) {
-				JsonObject m = new JsonObject();
-				m.putString("action", "save");
-				m.putString("collection", "mydb");
-				m.putObject("document", new JsonObject(tempString));
-				vertx.eventBus().send("hd.mgo", m, new Handler<Message<JsonObject>>() {
-					@Override
-					public void handle(Message<JsonObject> event) {
-						System.out.println(event.body().toString());
-					}
-				});
-			}
-			reader.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (IOException e1) {
-				}
-			}
-		}
+//		BufferedReader reader = null;
+//		try {
+//			File file = new File("E:\\work\\workspaces_vertx\\vx_platform\\zips.json");
+//			reader = new BufferedReader(new FileReader(file));
+//			String tempString = null;
+//			while ((tempString = reader.readLine()) != null) {
+//				JsonObject m = new JsonObject();
+//				m.putString("action", "save");
+//				m.putString("collection", "mydb");
+//				m.putObject("document", new JsonObject(tempString));
+//				vertx.eventBus().send("hd.mgo", m, new Handler<Message<JsonObject>>() {
+//					@Override
+//					public void handle(Message<JsonObject> event) {
+//						System.out.println(event.body().toString());
+//					}
+//				});
+//			}
+//			reader.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} finally {
+//			if (reader != null) {
+//				try {
+//					reader.close();
+//				} catch (IOException e1) {
+//				}
+//			}
+//		}
 	}
 
+	/**
+	 * 发布模块
+	 * @param logger
+	 * @param deployModules
+	 */
 	private void deployModules(final Logger logger, JsonArray deployModules) {
 		for (int i = 0; i < deployModules.size(); i++) {
 			JsonObject module = deployModules.get(i);

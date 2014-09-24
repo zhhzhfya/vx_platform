@@ -1,8 +1,5 @@
 {
 	"acts" : [{
-				"act" : "service_reg",
-				"services" : "load_res,aaa"
-			}, {
 				"act" : "sync_cache",
 				"sync" : true,
 				"res" : [{
@@ -22,10 +19,23 @@
 							"type" : "js",
 							"charset" : "utf-8"
 						}, {
+							"mod" : "formjs",
+							"path" : "sy-core/core.js",
+							"type" : "js",
+							"charset" : "utf-8"
+						}, {
+							"mod" : "formutiljs",
+							"path" : "sy-core/util.js",
+							"type" : "js",
+							"charset" : "utf-8"
+						}, {
 							"mod" : "syloginjs",
 							"path" : "js/login.js",
 							"type" : "js",
 							"charset" : "utf-8"
 						}]
-			}]
+			}, {
+				"act" : "service_reg",
+				"services" : "gen_form,genForm;gen_tree,genTree"
+			} ]
 }
